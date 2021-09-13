@@ -1,4 +1,7 @@
+import { GetStaticProps } from 'next'
 import Head from 'next/head'
+import Prismic from '@prismicio/client'
+import { getPrismicClient } from '../../services/prismic'
 import styles from './styles.module.scss'
 
 export default function Posts() {
@@ -8,9 +11,9 @@ export default function Posts() {
         <title>Posts | Ignews</title>
       </Head>
 
-      <main>
-        <div>
-          <a href=''>
+      <main className={styles.container}>
+        <div className={styles.posts}>
+          <a href='#'>
             <time>12 de março de 2021</time>
             <strong>Creating a Monorepo with Lerna & Yarn Workspaces</strong>
             <p>
@@ -18,7 +21,7 @@ export default function Posts() {
               multiple packages with a shared build, test, and release process.
             </p>
           </a>
-          <a href=''>
+          <a href='#'>
             <time>12 de março de 2021</time>
             <strong>Creating a Monorepo with Lerna & Yarn Workspaces</strong>
             <p>
@@ -26,7 +29,7 @@ export default function Posts() {
               multiple packages with a shared build, test, and release process.
             </p>
           </a>
-          <a href=''>
+          <a href='#'>
             <time>12 de março de 2021</time>
             <strong>Creating a Monorepo with Lerna & Yarn Workspaces</strong>
             <p>
@@ -34,7 +37,7 @@ export default function Posts() {
               multiple packages with a shared build, test, and release process.
             </p>
           </a>
-          <a href=''>
+          <a href='#'>
             <time>12 de março de 2021</time>
             <strong>Creating a Monorepo with Lerna & Yarn Workspaces</strong>
             <p>
@@ -46,4 +49,22 @@ export default function Posts() {
       </main>
     </>
   )
+}
+
+export const getStaticProp: GetStaticProps = async () => {
+  const prismic = getPrismicClient()
+
+  const response = await prismic.query(
+    [Prismic.predicates.at('document.type', 'publication')],
+    {
+      fetch: ['publication.title', 'publication.content'],
+      pageSize: 100,
+    }
+  )
+
+  console.log(response)
+
+  return {
+    props: {},
+  }
 }
