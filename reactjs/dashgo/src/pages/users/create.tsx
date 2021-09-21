@@ -9,9 +9,28 @@ import {
   Button,
 } from '@chakra-ui/react'
 import Link from 'next/link'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+
 import { Input } from '../../components/Form/Input'
 import { Header } from '../../components/Header'
 import { Sidebar } from '../../components/Sidebar'
+
+type createUserFormData = {
+  name: string
+  email: string
+  password: string
+  password_confirmation: string
+}
+
+const createUserFormSchema = yup.object().shape({
+  name: yup.string().required('Nome obrigatório'),
+  email: yup.string().required('Email obrigatório').email('Email inválido'),
+  password: yup
+    .string()
+    .required('Senha obrigatória')
+    .min(6, 'No mínimo 6 caracteres'),
+})
 
 export default function CreateUser() {
   return (
